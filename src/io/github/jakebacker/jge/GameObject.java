@@ -1,22 +1,39 @@
 package io.github.jakebacker.jge;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 public class GameObject {
 	private ArrayList<Component> components = new ArrayList<>();
 
-	public <T extends Component> Component getComponent(Class<T> componentClass) {
+	public String name = "";
+
+	public GameObject() {
+		name = "GameObject";
+		addComponent(Transform.class);
+		Main.sceneController.addGameObject(this);
+	}
+
+	public <T extends Component> T getComponent(Class<T> componentClass) {
 
 		for(Component c : components) {
-			if (c.getClass().getName().equals(clazz.getName())) { // HACK
-				return c;
+			if (c.getClass().getName().equals(componentClass.getName())) { // HACK
+				return (T)c; // Another hack
 			}
 		}
 		return null;
 	}
 
 	public <T extends Component> Component addComponent(Class<T> componentClass) {
-		
+		try {
+			T component = componentClass.getConstructor(GameObject.class).newInstance(this);
+			components.add(component);
+			return component;
+		} catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+			e.printStackTrace();
+			System.out.println("This should not happen!!!");
+		}
+		return null; // There is a problem if you get here
 	}
 
 
