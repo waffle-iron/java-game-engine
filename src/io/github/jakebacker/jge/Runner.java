@@ -1,6 +1,6 @@
 package io.github.jakebacker.jge;
 
-public class Main {
+public class Runner {
 
 	public static SceneController sceneController;
 	static GameObject go;

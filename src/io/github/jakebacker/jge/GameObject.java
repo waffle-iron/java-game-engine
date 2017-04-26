@@ -5,13 +5,14 @@ import java.util.ArrayList;
 
 public class GameObject {
 	private ArrayList<Component> components = new ArrayList<>();
+	public Transform transform;
 
 	public String name = "";
 
 	public GameObject() {
 		name = "GameObject";
-		addComponent(Transform.class);
-		Main.sceneController.addGameObject(this);
+		transform = addComponent(Transform.class);
+		Runner.sceneController.addGameObject(this);
 	}
 
 	public <T extends Component> T getComponent(Class<T> componentClass) {
@@ -24,7 +25,7 @@ public class GameObject {
 		return null;
 	}
 
-	public <T extends Component> Component addComponent(Class<T> componentClass) {
+	public <T extends Component> T addComponent(Class<T> componentClass) {
 		try {
 			T component = componentClass.getConstructor(GameObject.class).newInstance(this);
 			components.add(component);
